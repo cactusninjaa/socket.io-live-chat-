@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <style>
+        .zone-saisie {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+        input {
+            padding: 10px;
+            border: 1px solid #000;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        button {
+            padding: 10px;
+            border: 1px solid #000;
+            border-radius: 5px;
+            background-color: #000;
+            color: #fff;
+        }
+        #message {
+            margin-top: 20px;
+            padding: 10px 40px;
+            width: 100%;
+        }
+        #message div {
+            margin-bottom: 10px;
+            border-left: 4px solid #000;
+            padding-left: 10px;
+        }
+        #message div p {
+            font-family: sans-serif;
+
+        }
+    </style>
+    <div>
+        <div class="zone-saisie">
+            <input type="text" id="m"><button onclick="send()">Send</button>
+        </div>
+        <div id="message"></div>
+
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        let socket = io('http://localhost:3000');
+        let send = () => {
+            socket.emit('chat message', document.getElementById('m').value);
+        }
+
+        let printMessage = (message) => {
+            let messageZone = document.querySelector('#message')
+            messageZone.innerHTML += `
+                <div><p>${message}</p></div>
+            `
+        }
+        socket.on('chat message', (message) => {
+            printMessage(message)
+        });
+    </script>
+</body>
+</html>
